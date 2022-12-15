@@ -16,13 +16,12 @@ def get_db():
         return my_cur.fetchall();
 
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-my_data_row =list( get_db())
+my_data_row = get_db()
 my_cnx.close()
+db = streamlit.dataframe(my_data_row)
 
 
-fruits_selected = streamlit.multiselect("select db", my_data_row)
-fruits_selected = streamlit.multiselect("select db", my_data_row[1])
-
+fruits_selected = streamlit.multiselect("select db", db['name'])
 fruits_to_show = my_data_row.loc[fruits_selected]
 streamlit.dataframe(fruits_to_show)
 
