@@ -22,7 +22,7 @@ db = streamlit.dataframe(my_data_row)
 
 option = streamlit.selectbox(
 'select ',
- (db[0]))
+ (db))
 
 streamlit.write('You selected:', option)
 
