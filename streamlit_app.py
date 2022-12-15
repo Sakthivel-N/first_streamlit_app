@@ -24,8 +24,23 @@ streamlit.dataframe(my_data_row)
 option = streamlit.selectbox(
 'select ',
  (my_data_row))
-#selectvall = re.findall(r"'(.*?)'", str(option), re.DOTALL)
-streamlit.write('You selected:', option)
+selectval = re.findall(r"'(.*?)'", str(option), re.DOTALL)
+streamlit.write(selectval)
+query = "select DISTINCT table_schema from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+str(selectval[0])+"';"
+streamlit.write(query)
+def get_schema(query):
+    with my_cnx1.cursor() as my_cur1:
+        my_cur1.execute(query)
+
+        return my_cur1.fetchall();
+
+my_cnx1 = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+
+my_data_row1 = get_schema(query)
+
+my_cnx1.close()
+
+streamlit.dataframe(my_data_row1)
 
 
 
