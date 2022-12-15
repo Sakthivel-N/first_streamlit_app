@@ -19,7 +19,7 @@ my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_data_row = get_db()
 my_cnx.close()
 db = streamlit.dataframe(my_data_row)
-streamlit.dataframe(db[1])
+streamlit.dataframe(db['name'])
 
 
 # fruits_selected = streamlit.multiselect("select db", db['name'])
