@@ -77,12 +77,12 @@ my_cnx.close()
 
 streamlit.dataframe(column_row)
 
-# column_option = streamlit.selectbox(
-# 'select schema',
-#  (column_row))
-# columnname = re.findall(r"'(.*?)'", str(column_option), re.DOTALL)
+column_option = streamlit.selectbox(
+'select schema',
+ (column_row))
+columnname = re.findall(r"'(.*?)'", str(column_option), re.DOTALL)
 
-# streamlit.write(columnname[0])
+streamlit.write(columnname[0])
 
 
 
