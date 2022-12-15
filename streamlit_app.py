@@ -67,7 +67,7 @@ table_option = streamlit.selectbox(
 tablename = re.findall(r"'(.*?)'", str(table_option), re.DOTALL)
 
 streamlit.write(tablename)
-columnquery = "select column_name from information_schema.columns where table_catalog = '"+str(dbname[0])+"' and table_schema = '"+str(schemaname[0])+"' and table_name = '" + str(tablename[0])+"';"
+columnquery = "select column_name from "+str(dbname[0])+"."+str(schemaname[0])+".information_schema.columns where table_catalog = '"+str(dbname[0])+"' and table_schema = '"+str(schemaname[0])+"' and table_name = '" + str(tablename[0])+"';"
 streamlit.write(columnquery)
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 
