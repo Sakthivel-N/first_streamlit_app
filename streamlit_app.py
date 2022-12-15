@@ -9,7 +9,7 @@ import re
 
 streamlit.title("Data Lineage");
 
-streamlit.header('Select your Database')
+#streamlit.header('Select your Database')
 
 def get_db():
     with my_cnx.cursor() as my_cur:
@@ -19,7 +19,7 @@ def get_db():
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 db_row = get_db()
 my_cnx.close()
-streamlit.dataframe(db_row)
+#streamlit.dataframe(db_row)
 
 db_option = streamlit.selectbox(
 'select db',
@@ -40,7 +40,7 @@ schema_row = get_results(schemaquery)
 
 my_cnx.close()
 
-streamlit.dataframe(schema_row)
+#streamlit.dataframe(schema_row)
 
 
 schema_option = streamlit.selectbox(
@@ -58,32 +58,37 @@ table_row = get_results(tablequery)
 
 my_cnx.close()
 
-streamlit.dataframe(table_row)
+#streamlit.dataframe(table_row)
 
 
 table_option = streamlit.selectbox(
-'select schema',
+'select table',
  (table_row))
 tablename = re.findall(r"'(.*?)'", str(table_option), re.DOTALL)
 
-streamlit.write(tablename)
+#streamlit.write(tablename)
 columnquery = "select column_name from "+str(dbname[0])+".information_schema.columns where table_catalog = '"+str(dbname[0])+"' and table_schema = '"+str(schemaname[0])+"' and table_name = '" + str(tablename[0])+"';"
-streamlit.write(columnquery)
+
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 
 column_row = get_results(columnquery)
 
 my_cnx.close()
 
-streamlit.dataframe(column_row)
+#streamlit.dataframe(column_row)
 
 column_option = streamlit.selectbox(
-'select schema',
+'select column',
  (column_row))
 columnname = re.findall(r"'(.*?)'", str(column_option), re.DOTALL)
 
-streamlit.write(columnname[0])
+#streamlit.write(columnname[0])
 
+
+val = streamlit.text_input("Enter column values" )
+check_update_query = "SELECT t.query_start_time,t.USER_NAME,t.objects_modified,q.query_text from SNOWFLAKE.ACCOUNT_USAGE.ACCESS_HISTORY t LEFT JOIN SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY q on q.query_id = t.query_id,LATERAL FLATTEN(CASE WHEN ARRAY_SIZE(t.base_objects_accessed)>0 then t.base_objects_accessed ELSE t.objects_modified END) b WHERE b.value:"+"objectName"+" = '"+str(dbname[0]+"."+schemaname[0]+"."+tablename[0])+"' and startswith(q.query_text, 'update') and contains(q.query_text,"+str(columnname[0])+") and contains(q.query_text,"+str(val)+") ORDER BY query_start_time desc;"
+
+streamlit.write(check_update_query)
 
 
 
