@@ -22,13 +22,13 @@ streamlit.dataframe(list(my_data_row))
 
 option = streamlit.selectbox(
 'How would you like to be contacted?',
- ('Email', 'Home phone', 'Mobile phone'))
+ list(my_data_row))
 
 streamlit.write('You selected:', option)
 
-fruits_selected = streamlit.multiselect(list(my_data_row))
-fruits_to_show = my_data_row.loc[fruits_selected]
-streamlit.dataframe(fruits_to_show)
+# fruits_selected = streamlit.multiselect(list(my_data_row))
+# fruits_to_show = my_data_row.loc[fruits_selected]
+# streamlit.dataframe(fruits_to_show)
 
 
 
