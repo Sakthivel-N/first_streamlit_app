@@ -20,7 +20,11 @@ my_data_row = get_db()
 my_cnx.close()
 streamlit.dataframe(list(my_data_row))
 
+option = streamlit.selectbox(
+'How would you like to be contacted?',
+ ('Email', 'Home phone', 'Mobile phone'))
 
+streamlit.write('You selected:', option)
 
 fruits_selected = streamlit.multiselect(list(my_data_row))
 fruits_to_show = my_data_row.loc[fruits_selected]
