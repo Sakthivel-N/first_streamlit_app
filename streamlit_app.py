@@ -95,7 +95,7 @@ my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 datalineage_row = get_results(check_update_query)
 
 my_cnx.close()
-streamlit.dataframe(datalineage_row*1000)
+streamlit.dataframe([datalineage_row]*1000)
 
 
 # streamlit.text('Omega 3 & Blueberry Oatmeal')
