@@ -18,11 +18,11 @@ def get_db():
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_data_row = get_db()
 my_cnx.close()
-streamlit.dataframe(my_data_row)
+db = streamlit.dataframe(my_data_row)
 
 option = streamlit.selectbox(
 'select ',
- (my_data_row))
+ (db[0]))
 
 streamlit.write('You selected:', option)
 
