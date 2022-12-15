@@ -18,11 +18,11 @@ def get_db():
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_data_row = get_db()
 my_cnx.close()
-streamlit.dataframe(list(my_data_row))
+streamlit.dataframe(my_data_row)
 
 option = streamlit.selectbox(
 'How would you like to be contacted?',
- str(my_data_row))
+ str(list(my_data_row)))
 
 streamlit.write('You selected:', option)
 
