@@ -17,34 +17,48 @@ def get_db():
         return my_cur.fetchall();
 
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-my_data_row = get_db()
+db_row = get_db()
 my_cnx.close()
-streamlit.dataframe(my_data_row)
+streamlit.dataframe(db_row)
 
-option = streamlit.selectbox(
-'select ',
- (my_data_row))
-selectval = re.findall(r"'(.*?)'", str(option), re.DOTALL)
-streamlit.write(selectval)
-query = "select DISTINCT table_schema from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+str(selectval[0])+"';"
-streamlit.write(query)
-def get_schema(query):
-    with my_cnx1.cursor() as my_cur1:
-        my_cur1.execute(query)
+db_option = streamlit.selectbox(
+'select db',
+ (db_row))
+dbname = re.findall(r"'(.*?)'", str(db_option), re.DOTALL)
 
-        return my_cur1.fetchall();
+schemaquery = "select DISTINCT table_schema from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+str(dbname[0])+"';"
 
-my_cnx1 = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+def get_results(query):
+    with my_cnx.cursor() as my_cur:
+        my_cur.execute(query)
 
-my_data_row1 = get_schema(query)
+        return my_cur.fetchall();
 
-my_cnx1.close()
+my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 
-streamlit.dataframe(my_data_row1)
+schema_row = get_results(schemaquery)
 
+my_cnx.close()
 
+streamlit.dataframe(schema_row)
 
 
+schema_option = streamlit.selectbox(
+'select schema',
+ (schema_row))
+schemaname = re.findall(r"'(.*?)'", str(schema_option), re.DOTALL)
+
+
+
+tablequery = "select DISTINCT table_name from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+str(dbname[0])+"' and table_schema ='"+str(schemaname[0])+"';"
+
+my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+
+table_row = get_results(tablequery)
+
+my_cnx.close()
+
+streamlit.dataframe(table_row)
 
 
 
