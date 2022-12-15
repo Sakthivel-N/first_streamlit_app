@@ -88,9 +88,14 @@ columnname = re.findall(r"'(.*?)'", str(column_option), re.DOTALL)
 val = streamlit.text_input("Enter column values" )
 check_update_query = "SELECT t.query_start_time,t.USER_NAME,t.objects_modified,upper(q.query_text) as query_string from SNOWFLAKE.ACCOUNT_USAGE.ACCESS_HISTORY t LEFT JOIN SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY q on q.query_id = t.query_id,LATERAL FLATTEN(CASE WHEN ARRAY_SIZE(t.base_objects_accessed)>0 then t.base_objects_accessed ELSE t.objects_modified END) b WHERE b.value:\"objectName\""+" = '"+str(dbname[0]+"."+schemaname[0]+"."+tablename[0])+"' and startswith(query_string, 'UPDATE') and contains(query_string,'"+str("WHERE "+columnname[0]+" = "+val)+"') ORDER BY query_start_time desc;"
 
-streamlit.write(check_update_query)
+#streamlit.write(check_update_query)
 
+my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 
+datalineage_row = get_results(check_update_query)
+
+my_cnx.close()
+streamlit.dataframe(datalineage_row)
 
 
 # streamlit.text('Omega 3 & Blueberry Oatmeal')
