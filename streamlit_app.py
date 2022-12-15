@@ -12,15 +12,15 @@ streamlit.header('Select your Database')
 
 def get_db():
     with my_cnx.cursor() as my_cur:
-        my_cur.execute("show databases;")
+        my_cur.execute("select catalog_name as database,schema_name from   snowflake.information_schema.schemata order  by database, schema_name asc")
         return my_cur.fetchall();
 
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_data_row = get_db()
 my_cnx.close()
-streamlit.dataframe(my_data_row[0])
+streamlit.dataframe(my_data_row)
 
-fruits_selected = streamlit.multiselect("select db", list(my_data_row[0]),[])
+fruits_selected = streamlit.multiselect("select db", list(my_data_row),[])
 fruits_to_show = my_data_row.loc[fruits_selected]
 streamlit.dataframe(fruits_to_show)
 
