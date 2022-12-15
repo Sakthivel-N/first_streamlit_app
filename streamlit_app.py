@@ -3,6 +3,7 @@ import pandas
 import requests
 import snowflake.connector
 from urllib.error import URLError
+import re
 
 
 
@@ -18,13 +19,15 @@ def get_db():
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_data_row = get_db()
 my_cnx.close()
-db = streamlit.dataframe(my_data_row)
+streamlit.dataframe(my_data_row)
 
 option = streamlit.selectbox(
 'select ',
- (db))
+ (my_data_row))
+selectval = re.findall(r"'(.*?)'", option, re.DOTALL)
+streamlit.write('You selected:', selectval)
 
-streamlit.write('You selected:', option)
+
 
 
 
