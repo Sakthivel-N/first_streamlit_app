@@ -24,8 +24,8 @@ streamlit.dataframe(my_data_row)
 option = streamlit.selectbox(
 'select ',
  (my_data_row))
-selectval = re.findall(r"'(.*?)'", str(option), re.DOTALL)
-streamlit.write('You selected:', selectval)
+selectvall = re.findall(r"'(.*?)'", str(option), re.DOTALL)
+streamlit.write('You selected:', selectvall)
 
 
 
