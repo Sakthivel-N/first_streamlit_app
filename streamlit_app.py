@@ -26,9 +26,9 @@ option = streamlit.selectbox(
 
 streamlit.write('You selected:', option)
 
-# fruits_selected = streamlit.multiselect(list(my_data_row))
-# fruits_to_show = my_data_row.loc[fruits_selected]
-# streamlit.dataframe(fruits_to_show)
+fruits_selected = streamlit.multiselect("",list(my_data_row))
+fruits_to_show = my_data_row.loc[fruits_selected]
+streamlit.dataframe(fruits_to_show)
 
 
 
