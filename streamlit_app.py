@@ -18,7 +18,7 @@ def get_db():
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 my_data_row = get_db()
 my_cnx.close()
-streamlit.dataframe(my_data_row)
+streamlit.dataframe(list(my_data_row))
 
 
 
