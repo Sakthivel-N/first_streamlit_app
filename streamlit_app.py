@@ -61,7 +61,27 @@ my_cnx.close()
 streamlit.dataframe(table_row)
 
 
+table_option = streamlit.selectbox(
+'select schema',
+ (table_row))
+tablename = re.findall(r"'(.*?)'", str(table_option), re.DOTALL)
 
+columnquery = "select column_name from information_schema.columns where table_catalog = '"+str(dbname[0])+"' and table_schema = '"+str(schemaname[0])+"' and table_name = '" + str(tablename[0])+"';"
+
+my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+
+column_row = get_results(columnquery)
+
+my_cnx.close()
+
+streamlit.dataframe(column_row)
+
+column_option = streamlit.selectbox(
+'select schema',
+ (column_row))
+columnname = re.findall(r"'(.*?)'", str(column_option), re.DOTALL)
+
+streamlit.write(columnname[0])
 # streamlit.text('Omega 3 & Blueberry Oatmeal')
 # streamlit.text('Kale, Spinach & Rocket Smoothie')
 # streamlit.text('Hard-Boiled Free-Range Egg')
