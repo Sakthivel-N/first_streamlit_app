@@ -12,7 +12,7 @@ streamlit.header('Select your Database')
 
 def get_db():
     with my_cnx.cursor() as my_cur:
-        my_cur.execute("Select Databse_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;")
+        my_cur.execute("Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;")
         return my_cur.fetchall();
 
 my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
