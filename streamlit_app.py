@@ -22,7 +22,7 @@ streamlit.dataframe(list(my_data_row))
 
 option = streamlit.selectbox(
 'How would you like to be contacted?',
- my_data_row)
+ str(my_data_row))
 
 streamlit.write('You selected:', option)
 
