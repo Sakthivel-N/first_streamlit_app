@@ -4,8 +4,7 @@ import requests
 import snowflake.connector
 from urllib.error import URLError
 import re
-from streamlit.ScriptRequestQueue import RerunData
-from streamlit.ScriptRunner import RerunException
+
 
 
 streamlit.title("Data Lineage");
