@@ -32,6 +32,7 @@ def get_results(query,s):
 # ##db
 streamlit.header('Select your Database')
 dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
+streamlit.write(dbval)
 
 streamlit.header('Select your Schema')
 # ##schema
