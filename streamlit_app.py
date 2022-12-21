@@ -25,9 +25,8 @@ def get_results(query,s):
             result= my_cur.fetchall()
             streamlit.dataframe(result)
             if(s != 'NO'):
-                inputval = streamlit.selectbox("Enter your "+s+" : ", list(i[0] for i in result))
-                returnval = re.findall(r"'(.*?)'", str(inputval), re.DOTALL)
-                return(returnval[0])
+                inputval = streamlit.selectbox("Enter your "+s+" : ", list(i[0] for i in result)) 
+                return(inputval)
             
         finally:
             my_cur.close()
