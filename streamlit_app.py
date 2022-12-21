@@ -24,7 +24,7 @@ def get_results(query,s):
             if(s != 'NO'):
                 if s not in streamlit.session_state:
                     streamlit.session_state[s] = streamlit.radio("Enter your "+s+" : ", list(i[0] for i in result)) 
-                    return(streamlit.session_state[s])
+                    return(streamlit.session_state[s].value)
             else:
                 streamlit.dataframe(result);
             
