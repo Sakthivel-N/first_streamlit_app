@@ -11,16 +11,11 @@ streamlit.title("Data Lineage");
 
 streamlit.header('Select your Database')
 
-last_y1 = st.multiselect(
-    "Select year(s)",
-    ['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
-last_y2 = st.multiselect(
-    "Select year(s)",
-    ['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
 
 
 
-
+fruits_selected = streamlit.multiselect("Pick some fruits:", ['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
+streamlit.write(fruits_selected)
 
 # def get_results(query,s):
    
