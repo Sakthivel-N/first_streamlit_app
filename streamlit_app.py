@@ -17,35 +17,32 @@ streamlit.header('Select your Database')
 fruits_selected = streamlit.selectbox("Pick some fruits 0 :", ['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
 streamlit.write(fruits_selected)
 
-fruits_selected1 = streamlit.selectbox("Pick some fruits 1 :", ['1', '2', '3', '4', '5', '6', '7'])
-streamlit.write(fruits_selected1)
 
-fruits_selected2 = streamlit.selectbox("Pick some fruits 2 :", ['8', '9', '10', '11', '12', '138', '14'])
-streamlit.write(fruits_selected2)
-
-# def get_results(query,s):
+def get_results(query,s):
    
-#     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-#     with my_cnx.cursor() as my_cur:
-#         try:
-#             my_cur.execute('use warehouse COMPUTE_WH;')
+    my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+    with my_cnx.cursor() as my_cur:
+        try:
+            my_cur.execute('use warehouse COMPUTE_WH;')
             
-#             for q in query:
-#                 my_cur.execute(q)
-#             result= my_cur.fetchall()
-#             df = pd.DataFrame(result)
-#             print(df)
-#             if(s != 'NO'):
-#                 inputval = input("select your "+s+" : ")
-#                 return(inputval)
+            for q in query:
+                my_cur.execute(q)
+            result= my_cur.fetchall()
+            df = pd.DataFrame(result)
+            print(df)
+            if(s != 'NO'):
+                inputval = streamlit.selectbox("Enter your "+s+" : ", list(result))
+                ff =  streamlit.selectbox("Enter your "+s+" : ", list(df))
+                return([inputval,ff])
             
             
-#         finally:
-#             my_cur.close()
-#         my_cnx.close()
+        finally:
+            my_cur.close()
+        my_cnx.close()
 
 # ##db
-# dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
+dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
+streamlit.write(dbval)
 
 # ##schema
 # schemaval = get_results([f"select DISTINCT table_schema from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
