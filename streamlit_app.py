@@ -47,8 +47,9 @@ tableval = get_results([f"select DISTINCT(table_name) from SNOWFLAKE.INFORMATION
 
 streamlit.header('All DML Changes')
 # ##all Dml changes
-get_results([f"call DLG.PUBLIC.sp_dl_histroy('"+dbval+"."+schemaval+"."+tableval+"',1);",f"call DLG.PUBLIC.sp_dl();",f"select * from DLG.PUBLIC.employee_changes order by start_time ;"],'NO')
-
+get_results([f"call DLG.PUBLIC.sp_dl_histroy('"+dbval+"."+schemaval+"."+tableval+"',1);"],'NO')
+get_results([f"call DLG.PUBLIC.sp_dl();"],'NO')
+get_results([f"select * from DLG.PUBLIC.employee_changes order by start_time ;"],'NO')
 streamlit.header('All Inserts')
 # ##inser all
 get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' order by start_time;"],'NO')
