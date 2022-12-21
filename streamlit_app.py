@@ -36,47 +36,47 @@ def get_results(query,s):
 
 # ##db
 dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
-streamlit.write(dbval)
+
 
 # ##schema
 schemaval = get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
-streamlit.write(schemaval)
+
 
 # ##Table
-# tableval = get_results([f"select DISTINCT(table_name) from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+dbval+"' and table_schema ='"+schemaval+"';"],"Table")
-# streamlit.write(tableval)
+tableval = get_results([f"select DISTINCT(table_name) from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+dbval+"' and table_schema ='"+schemaval+"';"],"Table")
 
-# # ##all Dml changes
-# get_results([f"call DLG.PUBLIC.sp_dl_histroy('"+dbval+"."+schemaval+"."+tableval+"',1);",f"call DLG.PUBLIC.sp_dl();",f"select * from DLG.PUBLIC.employee_changes order by start_time ;"],'NO')
 
-# # ##inser all
-# get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' order by start_time;"],'NO')
+# ##all Dml changes
+get_results([f"call DLG.PUBLIC.sp_dl_histroy('"+dbval+"."+schemaval+"."+tableval+"',1);",f"call DLG.PUBLIC.sp_dl();",f"select * from DLG.PUBLIC.employee_changes order by start_time ;"],'NO')
 
-# ##update all
-# get_results([f"select * from DLG.PUBLIC.employee_changes where (metadata$action ='INSERT' or metadata$action ='DELETE' )and metadata$isupdate='true' order by start_time;"],'NO')
+# ##inser all
+get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' order by start_time;"],'NO')
 
-# ##delete all
-# get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false' order by  start_time;"],'NO')
+##update all
+get_results([f"select * from DLG.PUBLIC.employee_changes where (metadata$action ='INSERT' or metadata$action ='DELETE' )and metadata$isupdate='true' order by start_time;"],'NO')
 
-# ##column
-# COLUMNVAL = get_results([f"select column_name from "+dbval+".information_schema.columns where table_catalog = '"+dbval+"' and table_schema = '"+schemaval+"' and table_name = '" + tableval+"';"],"Column")
+##delete all
+get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false' order by  start_time;"],'NO')
 
-# ##columnval
-# SEARCHVAL = input("Enter "+COLUMNVAL+" value : ")
+##column
+COLUMNVAL = get_results([f"select column_name from "+dbval+".information_schema.columns where table_catalog = '"+dbval+"' and table_schema = '"+schemaval+"' and table_name = '" + tableval+"';"],"Column")
 
-# ## FOR COLUMN 
-# #
-# # all dml
-# get_results([f" select * from DLG.PUBLIC.employee_changes  WHERE "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+##columnval
+SEARCHVAL = input("Enter "+COLUMNVAL+" value : ")
 
-# #insert only
-# get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+## FOR COLUMN 
+#
+# all dml
+get_results([f" select * from DLG.PUBLIC.employee_changes  WHERE "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
 
-# #update only
-# get_results([f"select * from DLG.PUBLIC.employee_changes where (metadata$action ='INSERT' or metadata$action ='DELETE' )and metadata$isupdate='true' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+#insert only
+get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
 
-# #delete only
-# get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false'  AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by  start_time;"],'NO')
+#update only
+get_results([f"select * from DLG.PUBLIC.employee_changes where (metadata$action ='INSERT' or metadata$action ='DELETE' )and metadata$isupdate='true' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+
+#delete only
+get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false'  AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by  start_time;"],'NO')
 
 ########finished
 
