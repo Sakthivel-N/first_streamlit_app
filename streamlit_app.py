@@ -20,7 +20,6 @@ def get_results(query,s):
             for q in query:
                 my_cur.execute(q)
             result= my_cur.fetchall()
-            streamlit.dataframe(result)
             
             if(s != 'NO'):
                 inputval = streamlit.radio("Enter your "+s+" : ", list(i[0] for i in result)) 
