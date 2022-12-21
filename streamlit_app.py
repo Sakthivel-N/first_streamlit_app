@@ -17,6 +17,12 @@ streamlit.header('Select your Database')
 fruits_selected = streamlit.multiselect("Pick some fruits:", ['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
 streamlit.write(fruits_selected)
 
+fruits_selected1 = streamlit.multiselect("Pick some fruits:", ['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
+streamlit.write(fruits_selected1)
+
+fruits_selected2 = streamlit.multiselect("Pick some fruits:", ['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
+streamlit.write(fruits_selected2)
+
 # def get_results(query,s):
    
 #     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
