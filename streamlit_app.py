@@ -22,8 +22,9 @@ def get_results(query,s):
             result= my_cur.fetchall()
             
             if(s != 'NO'):
-                inputval = streamlit.radio("Enter your "+s+" : ", list(i[0] for i in result)) 
-                return(inputval)
+                if 'key' not in st.session_state:
+                    streamlit.session_state[s] = streamlit.radio("Enter your "+s+" : ", list(i[0] for i in result)) 
+                    return(streamlit.session_state[s])
             else:
                 streamlit.dataframe(result);
             
