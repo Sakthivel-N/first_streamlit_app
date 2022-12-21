@@ -83,7 +83,7 @@ streamlit.header('All Deletes on column')
 #delete only
 get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false'  AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by  start_time;"],'NO')
 
-streamlit.header('-----------------------------------------------------***-------------------------------------------------------')
+streamlit.header('-----------------------------***----------------------------')
 
 
 # def get_db():
