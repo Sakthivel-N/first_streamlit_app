@@ -11,11 +11,12 @@ streamlit.title("Data Lineage");
 
 streamlit.header('Select your Database')
 
-last_y1 = session_state.y1
-session_state.y1 = st.multiselect(
+last_y1 = st.multiselect(
     "Select year(s)",
-    ['2013', '2014', '2015', '2016', '2017', '2018', '2019'],
-    session_state.y1)
+    ['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
+last_y2 = st.multiselect(
+    "Select year(s)",
+    ['2013', '2014', '2015', '2016', '2017', '2018', '2019'])
 
 
 
