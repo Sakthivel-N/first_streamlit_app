@@ -26,8 +26,8 @@ def get_results(query,s):
             streamlit.dataframe(result)
             if(s != 'NO'):
                 inputval = streamlit.selectbox("Enter your "+s+" : ", list(result))
-                
-                return(inputval)
+                schemaname = re.findall(r"'(.*?)'", str(inputval), re.DOTALL)
+                return(schemaname)
             
             
         finally:
