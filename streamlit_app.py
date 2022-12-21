@@ -22,7 +22,7 @@ def get_results(query,s):
             result= my_cur.fetchall()
             
             if(s != 'NO'):
-                inputval = streamlit.radio("Enter your "+s+" : ", list(i[0] for i in result)) 
+                inputval = streamlit.selectbox("Enter your "+s+" : ", list(i[0] for i in result)) 
                 return(inputval)
             else:
                 streamlit.dataframe(result);
