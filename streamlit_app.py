@@ -18,8 +18,7 @@ session_state.y1 = st.multiselect(
     ['2013', '2014', '2015', '2016', '2017', '2018', '2019'],
     session_state.y1)
 
-if last_y1 != session_state.y1:
-    raise RerunException(RerunData(widget_state=None))
+
 
 
 
