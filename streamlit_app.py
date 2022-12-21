@@ -11,7 +11,7 @@ streamlit.title("Data Lineage");
 
 streamlit.header('Select your Database')
 
-@streamlit.cache(hash_funcs={StringIO: StringIO.getvalue})
+@streamlit.cache(ttl=60)
 def get_results(query,s):
    
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
