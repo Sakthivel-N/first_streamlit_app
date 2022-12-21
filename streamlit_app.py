@@ -39,11 +39,11 @@ dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DA
 streamlit.write(dbval)
 
 # ##schema
-schemaval = get_results([f"select DISTINCT table_schema from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
+schemaval = get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
 streamlit.write(schemaval)
 
 # ##Table
-tableval = get_results([f"select DISTINCT table_name from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+dbval+"' and table_schema ='"+schemaval+"';"],"Table")
+tableval = get_results([f"select DISTINCT(table_name) from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+dbval+"' and table_schema ='"+schemaval+"';"],"Table")
 streamlit.write(tableval)
 
 # ##all Dml changes
