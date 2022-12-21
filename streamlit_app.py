@@ -63,7 +63,7 @@ COLUMNVAL = get_results([f"select column_name from "+dbval+".information_schema.
 
 
 ##columnval
-SEARCHVAL = input("Enter "+COLUMNVAL+" value : ")
+SEARCHVAL  = streamlit.text_input("Enter "+COLUMNVAL+" value : " )
 
 ## FOR COLUMN 
 #
