@@ -9,8 +9,6 @@ from io import StringIO
 
 streamlit.title("Data Lineage");
 
-streamlit.header('Select your Database')
-
 @streamlit.cache(ttl=60)
 def get_results(query,s):
    
@@ -23,8 +21,9 @@ def get_results(query,s):
                 my_cur.execute(q)
             result= my_cur.fetchall()
             streamlit.dataframe(result)
+            
             if(s != 'NO'):
-                inputval = streamlit.selectbox("Enter your "+s+" : ", list(i[0] for i in result)) 
+                inputval = streamlit.radio("Enter your "+s+" : ", list(i[0] for i in result)) 
                 return(inputval)
             
         finally:
@@ -32,6 +31,7 @@ def get_results(query,s):
         my_cnx.close()
 
 # ##db
+streamlit.header('Select your Database')
 dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
 
 streamlit.header('Select your Schema')
