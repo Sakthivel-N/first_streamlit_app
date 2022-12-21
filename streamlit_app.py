@@ -4,13 +4,14 @@ import requests
 import snowflake.connector
 from urllib.error import URLError
 import re
-
+from io import StringIO
 
 
 streamlit.title("Data Lineage");
 
 streamlit.header('Select your Database')
 
+@streamlit.cache(hash_funcs={StringIO: StringIO.getvalue})
 def get_results(query,s):
    
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
