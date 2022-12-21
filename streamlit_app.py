@@ -20,7 +20,7 @@ streamlit.write(fruits_selected)
 fruits_selected1 = streamlit.multiselect("Pick some fruits 1 :", ['1', '2', '3', '4', '5', '6', '7'])
 streamlit.write(fruits_selected1)
 
-fruits_selected2 = streamlit.multiselect("Pick some fruits 2 :", ['8', '9', '10', '11', '12', '138', '14'])
+fruits_selected2 = streamlit.select("Pick some fruits 2 :", ['8', '9', '10', '11', '12', '138', '14'])
 streamlit.write(fruits_selected2)
 
 # def get_results(query,s):
