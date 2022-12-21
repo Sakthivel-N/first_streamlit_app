@@ -27,7 +27,7 @@ def get_results(query,s):
             for i in result:
                 streamlit.write(i[0])
             if(s != 'NO'):
-                inputval = streamlit.selectbox("Enter your "+s+" : ", list(result))
+                inputval = streamlit.selectbox("Enter your "+s+" : ", list(i[0] for i in result))
                 returnval = re.findall(r"'(.*?)'", str(inputval), re.DOTALL)
                 return(returnval[0])
             
