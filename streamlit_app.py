@@ -1,101 +1,180 @@
 import streamlit
-import pandas
+import pandas as pd
 import requests
 import snowflake.connector
 from urllib.error import URLError
 import re
-
+from streamlit.ScriptRequestQueue import RerunData
+from streamlit.ScriptRunner import RerunException
 
 
 streamlit.title("Data Lineage");
 
-#streamlit.header('Select your Database')
+streamlit.header('Select your Database')
 
-def get_db():
-    with my_cnx.cursor() as my_cur:
-        my_cur.execute("Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;")
-        return my_cur.fetchall();
+last_y1 = session_state.y1
+session_state.y1 = st.multiselect(
+    "Select year(s)",
+    ['2013', '2014', '2015', '2016', '2017', '2018', '2019'],
+    session_state.y1)
 
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-db_row = get_db()
-my_cnx.close()
-#streamlit.dataframe(db_row)
-
-db_option = streamlit.selectbox(
-'select db',
- (db_row))
-dbname = re.findall(r"'(.*?)'", str(db_option), re.DOTALL)
-
-schemaquery = "select DISTINCT table_schema from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+str(dbname[0])+"';"
-
-def get_results(query):
-    with my_cnx.cursor() as my_cur:
-        my_cur.execute(query)
-
-        return my_cur.fetchall();
-
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-
-schema_row = get_results(schemaquery)
-
-my_cnx.close()
-
-#streamlit.dataframe(schema_row)
-
-
-schema_option = streamlit.selectbox(
-'select schema',
- (schema_row))
-schemaname = re.findall(r"'(.*?)'", str(schema_option), re.DOTALL)
+if last_y1 != session_state.y1:
+    raise RerunException(RerunData(widget_state=None))
 
 
 
-tablequery = "select DISTINCT table_name from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+str(dbname[0])+"' and table_schema ='"+str(schemaname[0])+"';"
+# def get_results(query,s):
+   
+#     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+#     with my_cnx.cursor() as my_cur:
+#         try:
+#             my_cur.execute('use warehouse COMPUTE_WH;')
+            
+#             for q in query:
+#                 my_cur.execute(q)
+#             result= my_cur.fetchall()
+#             df = pd.DataFrame(result)
+#             print(df)
+#             if(s != 'NO'):
+#                 inputval = input("select your "+s+" : ")
+#                 return(inputval)
+            
+            
+#         finally:
+#             my_cur.close()
+#         my_cnx.close()
 
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+# ##db
+# dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
 
-table_row = get_results(tablequery)
+# ##schema
+# schemaval = get_results([f"select DISTINCT table_schema from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
 
-my_cnx.close()
+# ##Table
+# tableval = get_results([f"select DISTINCT table_name from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+dbval+"' and table_schema ='"+schemaval+"';"],"Table")
 
-#streamlit.dataframe(table_row)
+# ##all Dml changes
+# get_results([f"call DLG.PUBLIC.sp_dl_histroy('"+dbval+"."+schemaval+"."+tableval+"',1);",f"call DLG.PUBLIC.sp_dl();",f"select * from DLG.PUBLIC.employee_changes order by start_time ;"],'NO')
+
+# ##inser all
+# get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' order by start_time;"],'NO')
+
+# ##update all
+# get_results([f"select * from DLG.PUBLIC.employee_changes where (metadata$action ='INSERT' or metadata$action ='DELETE' )and metadata$isupdate='true' order by start_time;"],'NO')
+
+# ##delete all
+# get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false' order by  start_time;"],'NO')
+
+# ##column
+# COLUMNVAL = get_results([f"select column_name from "+dbval+".information_schema.columns where table_catalog = '"+dbval+"' and table_schema = '"+schemaval+"' and table_name = '" + tableval+"';"],"Column")
+
+# ##columnval
+# SEARCHVAL = input("Enter "+COLUMNVAL+" value : ")
+
+# ## FOR COLUMN 
+# #
+# # all dml
+# get_results([f" select * from DLG.PUBLIC.employee_changes  WHERE "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+
+# #insert only
+# get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+
+# #update only
+# get_results([f"select * from DLG.PUBLIC.employee_changes where (metadata$action ='INSERT' or metadata$action ='DELETE' )and metadata$isupdate='true' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+
+# #delete only
+# get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false'  AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by  start_time;"],'NO')
+
+########finished
 
 
-table_option = streamlit.selectbox(
-'select table',
- (table_row))
-tablename = re.findall(r"'(.*?)'", str(table_option), re.DOTALL)
+# def get_db():
+#     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+#     with my_cnx.cursor() as my_cur:
+#         my_cur.execute("Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;")
+#         OUTPUT = my_cur.fetchall()
+#         my_cnx.close()
+#         return OUTPUT;
 
-#streamlit.write(tablename)
-columnquery = "select column_name from "+str(dbname[0])+".information_schema.columns where table_catalog = '"+str(dbname[0])+"' and table_schema = '"+str(schemaname[0])+"' and table_name = '" + str(tablename[0])+"';"
+# db_row = get_db()
+# my_cnx.close()
+# streamlit.dataframe(db_row)
 
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+# db_option = streamlit.selectbox(
+# 'select db',
+#  (db_row))
+# dbname = re.findall(r"'(.*?)'", str(db_option), re.DOTALL)
 
-column_row = get_results(columnquery)
+# schemaquery = "select DISTINCT table_schema from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+str(dbname[0])+"';"
 
-my_cnx.close()
+# def get_results(query):
+#     with my_cnx.cursor() as my_cur:
+#         my_cur.execute(query)
 
-#streamlit.dataframe(column_row)
+#         return my_cur.fetchall();
 
-column_option = streamlit.selectbox(
-'select column',
- (column_row))
-columnname = re.findall(r"'(.*?)'", str(column_option), re.DOTALL)
+# my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 
-#streamlit.write(columnname[0])
+# schema_row = get_results(schemaquery)
+
+# my_cnx.close()
+
+# streamlit.dataframe(schema_row)
 
 
-val = streamlit.text_input("Enter column values" )
-check_update_query = "SELECT t.query_start_time,t.USER_NAME,upper(q.query_text) as query_string,t.objects_modified from SNOWFLAKE.ACCOUNT_USAGE.ACCESS_HISTORY t LEFT JOIN SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY q on q.query_id = t.query_id,LATERAL FLATTEN(CASE WHEN ARRAY_SIZE(t.base_objects_accessed)>0 then t.base_objects_accessed ELSE t.objects_modified END) b WHERE b.value:\"objectName\""+" = '"+str(dbname[0]+"."+schemaname[0]+"."+tablename[0])+"' and startswith(query_string, 'UPDATE') and contains(query_string,'"+str("WHERE "+columnname[0]+" = "+val)+"') ORDER BY query_start_time desc;"
+# schema_option = streamlit.selectbox(
+# 'select schema',
+#  (schema_row))
+# schemaname = re.findall(r"'(.*?)'", str(schema_option), re.DOTALL)
 
-#streamlit.write(check_update_query)
 
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
 
-datalineage_row = get_results(check_update_query)
+# tablequery = "select DISTINCT table_name from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+str(dbname[0])+"' and table_schema ='"+str(schemaname[0])+"';"
 
-my_cnx.close()
-streamlit.dataframe(datalineage_row)
+# my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+
+# table_row = get_results(tablequery)
+
+# my_cnx.close()
+
+# streamlit.dataframe(table_row)
+
+
+# table_option = streamlit.selectbox(
+# 'select table',
+#  (table_row))
+# tablename = re.findall(r"'(.*?)'", str(table_option), re.DOTALL)
+
+# streamlit.write(tablename)
+# columnquery = "select column_name from "+str(dbname[0])+".information_schema.columns where table_catalog = '"+str(dbname[0])+"' and table_schema = '"+str(schemaname[0])+"' and table_name = '" + str(tablename[0])+"';"
+
+# my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+
+# column_row = get_results(columnquery)
+
+# my_cnx.close()
+
+# streamlit.dataframe(column_row)
+
+# column_option = streamlit.selectbox(
+# 'select column',
+#  (column_row))
+# columnname = re.findall(r"'(.*?)'", str(column_option), re.DOTALL)
+
+# streamlit.write(columnname[0])
+
+
+# val = streamlit.text_input("Enter column values" )
+# check_update_query = "SELECT t.query_start_time,t.USER_NAME,upper(q.query_text) as query_string,t.objects_modified from SNOWFLAKE.ACCOUNT_USAGE.ACCESS_HISTORY t LEFT JOIN SNOWFLAKE.ACCOUNT_USAGE.QUERY_HISTORY q on q.query_id = t.query_id,LATERAL FLATTEN(CASE WHEN ARRAY_SIZE(t.base_objects_accessed)>0 then t.base_objects_accessed ELSE t.objects_modified END) b WHERE b.value:\"objectName\""+" = '"+str(dbname[0]+"."+schemaname[0]+"."+tablename[0])+"' and startswith(query_string, 'UPDATE') and contains(query_string,'"+str("WHERE "+columnname[0]+" = "+val)+"') ORDER BY query_start_time desc;"
+
+# streamlit.write(check_update_query)
+
+# my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+
+# datalineage_row = get_results(check_update_query)
+
+# my_cnx.close()
+# streamlit.dataframe(datalineage_row)
 
 
 # streamlit.text('Omega 3 & Blueberry Oatmeal')
