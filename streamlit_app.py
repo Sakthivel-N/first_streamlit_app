@@ -35,20 +35,20 @@ def get_results(query,s):
 with streamlit.form("first_form2"):
     
     
-    # ##db
+# ##db
     streamlit.header('Select your Database')
     dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
 
 
     streamlit.header('Select your Schema')
     # ##schema
-    schemaval = get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS ;"],"schema")
+    schemaval = get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
 
 
     streamlit.header('Select your Table')
     # ##Table
-    tableval = get_results([f"select DISTINCT(table_name) from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS ;"],"Table")
-    
+    tableval = get_results([f"select DISTINCT(table_name) from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+dbval+"' and table_schema ='"+schemaval+"';"],"Table")
+
     
     streamlit.header('All DML Changes')
     # ##all Dml changes
@@ -65,7 +65,7 @@ with streamlit.form("first_form2"):
     ##delete all
     get_results([f"select * from Data_lineage.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false' order by  start_time;"],'NO')
 
-
+    
 
     streamlit.header('Enter your Column')
     ##column
