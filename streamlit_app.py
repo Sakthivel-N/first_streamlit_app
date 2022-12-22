@@ -48,7 +48,7 @@ with streamlit.form("first_form2"):
     streamlit.header('Select your Table')
     # ##Table
     tableval = get_results([f"select DISTINCT(table_name) from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+dbval+"' and table_schema ='"+schemaval+"';"],"Table")
-
+    streamlit.form_submit_button(label='APPLY')
     
     streamlit.header('All DML Changes')
     # ##all Dml changes
