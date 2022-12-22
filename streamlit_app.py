@@ -27,11 +27,7 @@ def get_results(query,s):
                 inputval = streamlit.selectbox("Enter your "+s+" : ", list(i[0] for i in result)) 
                 return(inputval)
             else:
-                df = streamlit.dataframe(result);
-                streamlit.write(df['7'].unique())
-                # for i in result:
-                #     streamlit.write(i)
-                
+                streamlit.dataframe(result[0][7]);
             
         finally:
             my_cur.close()
