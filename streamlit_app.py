@@ -10,9 +10,6 @@ from io import StringIO
 streamlit.title("Data Lineage");
 
 
-
-
-
 async def get_results(query,s):
 
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
