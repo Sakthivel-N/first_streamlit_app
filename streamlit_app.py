@@ -31,7 +31,7 @@ def get_results(query,s):
         my_cnx.close()
 
 # ##db
-clicked = streamlit.button("DL")
+clicked = streamlit.checkbox("DL")
 if clicked:
 
 
