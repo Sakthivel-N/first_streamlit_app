@@ -5,6 +5,7 @@ import snowflake.connector
 from urllib.error import URLError
 import re
 from io import StringIO
+import asyncio
 
 streamlit.title("Data Lineage");
 
@@ -12,7 +13,7 @@ streamlit.title("Data Lineage");
 
 
 
-def get_results(query,s):
+async def get_results(query,s):
 
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
     with my_cnx.cursor() as my_cur:
@@ -31,6 +32,7 @@ def get_results(query,s):
             
         finally:
             my_cur.close()
+        await asyncio.sleep(1)
         my_cnx.close()
 
 with streamlit.form("first_form2"):

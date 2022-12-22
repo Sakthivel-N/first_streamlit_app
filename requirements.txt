@@ -1,2 +1,2 @@
 snowflake-connector-python
-streamlit-autorefresh
+asyncio
