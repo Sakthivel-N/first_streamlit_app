@@ -5,10 +5,9 @@ import snowflake.connector
 from urllib.error import URLError
 import re
 from io import StringIO
-
+import SessionState
 
 streamlit.title("Data Lineage");
-
 
 def get_results(query,s):
    
@@ -32,21 +31,22 @@ def get_results(query,s):
         my_cnx.close()
 
 # ##db
+session_state = SessionState.get(dbval='', schemaval='',tableval ='',COLUMNVAL ='',SEARCHVAL='' )
 streamlit.header('Select your Database')
-dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
-streamlit.write(dbval)
+session_state.dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
+
 
 streamlit.header('Select your Schema')
 # ##schema
-schemaval = get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
+session_state.schemaval = get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
 
 streamlit.header('Select your Table')
 # ##Table
-tableval = get_results([f"select DISTINCT(table_name) from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+dbval+"' and table_schema ='"+schemaval+"';"],"Table")
+session_state.tableval = get_results([f"select DISTINCT(table_name) from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+dbval+"' and table_schema ='"+schemaval+"';"],"Table")
 
 streamlit.header('All DML Changes')
 # ##all Dml changes
-get_results([f"call DLG.PUBLIC.sp_dl_histroy('"+dbval+"."+schemaval+"."+tableval+"',1);"],'NO')
+get_results([f"call DLG.PUBLIC.sp_dl_histroy('"+session_state.dbval+"."+session_state.schemaval+"."+session_state.tableval+"',1);"],'NO')
 get_results([f"call DLG.PUBLIC.sp_dl();"],'NO')
 get_results([f"select * from DLG.PUBLIC.employee_changes order by start_time ;"],'NO')
 streamlit.header('All Inserts')
@@ -63,29 +63,29 @@ get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action =
 
 streamlit.header('Enter your Column')
 ##column
-COLUMNVAL = get_results([f"select column_name from "+dbval+".information_schema.columns where table_catalog = '"+dbval+"' and table_schema = '"+schemaval+"' and table_name = '" + tableval+"';"],"Column")
+session_state.COLUMNVAL = get_results([f"select column_name from "+session_state.dbval+".information_schema.columns where table_catalog = '"+session_state.dbval+"' and table_schema = '"+session_state.schemaval+"' and table_name = '" + session_state.tableval+"';"],"Column")
 
 
 ##columnval
-SEARCHVAL  = streamlit.text_input("Enter "+COLUMNVAL+" value : " )
+session_state.SEARCHVAL  = streamlit.text_input("Enter "+session_state.COLUMNVAL+" value : " )
 
 ## FOR COLUMN 
 #
 # all dml
 streamlit.header('All DML on column')
-get_results([f" select * from DLG.PUBLIC.employee_changes  WHERE "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+get_results([f" select * from DLG.PUBLIC.employee_changes  WHERE "+session_state.COLUMNVAL+" = "+ session_state.SEARCHVAL+" order by start_time;"],'NO')
 
 streamlit.header('All Insert on column')
 #insert only
-get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' AND "+session_state.COLUMNVAL+" = "+ session_state.SEARCHVAL+" order by start_time;"],'NO')
 
 streamlit.header('All Updates on column')
 #update only
-get_results([f"select * from DLG.PUBLIC.employee_changes where (metadata$action ='INSERT' or metadata$action ='DELETE' )and metadata$isupdate='true' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+get_results([f"select * from DLG.PUBLIC.employee_changes where (metadata$action ='INSERT' or metadata$action ='DELETE' )and metadata$isupdate='true' AND "+session_state.COLUMNVAL+" = "+ session_state.SEARCHVAL+" order by start_time;"],'NO')
 
 streamlit.header('All Deletes on column')
 #delete only
-get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false'  AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by  start_time;"],'NO')
+get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false'  AND "+session_state.COLUMNVAL+" = "+ session_state.SEARCHVAL+" order by  start_time;"],'NO')
 
 streamlit.header('-----------------------------***----------------------------')
 
