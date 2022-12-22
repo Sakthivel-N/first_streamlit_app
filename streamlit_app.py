@@ -21,7 +21,7 @@ def get_results(query,s):
             result= my_cur.fetchall()
             
             if(s != 'NO'):
-                inputval = streamlit.checkbox("Enter your "+s+" : ", list(i[0] for i in result)) 
+                inputval = streamlit.multiselect("Enter your "+s+" : ", list(i[0] for i in result)) 
                 return(inputval)
             else:
                 streamlit.dataframe(result);
@@ -31,17 +31,13 @@ def get_results(query,s):
         my_cnx.close()
 
 # ##db
-clicked = streamlit.checkbox("DL")
-if clicked:
+streamlit.header('Select your Database')
+dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
 
 
-    streamlit.header('Select your Database')
-    dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
-
-
-    streamlit.header('Select your Schema')
-    # ##schema
-    schemaval = get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
+streamlit.header('Select your Schema')
+# ##schema
+schemaval = get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
 
 streamlit.stop()
 streamlit.header('Select your Table')
