@@ -9,8 +9,8 @@ from io import StringIO
 streamlit.title("Data Lineage");
 
 if "load_state" not in streamlit.session_state:
-    streamlit.session_state.load_state = True
-if streamlit.session_state.load_state :
+    streamlit.session_state.load_state = False
+if True or streamlit.session_state.load_state :
 
     def get_results(query,s):
     
@@ -49,20 +49,20 @@ if streamlit.session_state.load_state :
 
     streamlit.header('All DML Changes')
     # ##all Dml changes
-    get_results([f"call DLG.PUBLIC.sp_dl_histroy('"+dbval+"."+schemaval+"."+tableval+"',1);"],'NO')
-    get_results([f"call DLG.PUBLIC.sp_dl();"],'NO')
-    get_results([f"select * from DLG.PUBLIC.employee_changes order by start_time ;"],'NO')
+    get_results([f"call Data_lineage.PUBLIC.sp_dl_histroy('"+dbval+"."+schemaval+"."+tableval+"',1);"],'NO')
+    get_results([f"call Data_lineage.PUBLIC.sp_dl();"],'NO')
+    get_results([f"select * from Data_lineage.PUBLIC.employee_changes order by start_time ;"],'NO')
     streamlit.header('All Inserts')
     # ##inser all
-    get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' order by start_time;"],'NO')
+    get_results([f"select * from Data_lineage.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' order by start_time;"],'NO')
 
     streamlit.header('All Updates')
     ##update all
-    get_results([f"select * from DLG.PUBLIC.employee_changes where (metadata$action ='INSERT' or metadata$action ='DELETE' )and metadata$isupdate='true' order by start_time;"],'NO')
+    get_results([f"select * from Data_lineage.PUBLIC.employee_changes where (metadata$action ='INSERT' or metadata$action ='DELETE' )and metadata$isupdate='true' order by start_time;"],'NO')
 
     streamlit.header('All Deletes')
     ##delete all
-    get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false' order by  start_time;"],'NO')
+    get_results([f"select * from Data_lineage.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false' order by  start_time;"],'NO')
 
     streamlit.header('Enter your Column')
     ##column
@@ -76,19 +76,19 @@ if streamlit.session_state.load_state :
     #
     # all dml
     streamlit.header('All DML on column')
-    get_results([f" select * from DLG.PUBLIC.employee_changes  WHERE "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+    get_results([f" select * from Data_lineage.PUBLIC.employee_changes  WHERE "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
 
     streamlit.header('All Insert on column')
     #insert only
-    get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+    get_results([f"select * from Data_lineage.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
 
     streamlit.header('All Updates on column')
     #update only
-    get_results([f"select * from DLG.PUBLIC.employee_changes where (metadata$action ='INSERT' or metadata$action ='DELETE' )and metadata$isupdate='true' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+    get_results([f"select * from Data_lineage.PUBLIC.employee_changes where (metadata$action ='INSERT' or metadata$action ='DELETE' )and metadata$isupdate='true' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
 
     streamlit.header('All Deletes on column')
     #delete only
-    get_results([f"select * from DLG.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false'  AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by  start_time;"],'NO')
+    get_results([f"select * from Data_lineage.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false'  AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by  start_time;"],'NO')
 
     streamlit.header('-----------------------------***----------------------------')
 
