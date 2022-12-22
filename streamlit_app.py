@@ -67,10 +67,7 @@ with streamlit.form("first_form2"):
     ##delete all
     get_results([f"select * from Data_lineage.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false' order by  start_time;"],'NO')
 
-    streamlit.form_submit_button(label='Run')
-
-with streamlit.form("first_form3"):
-
+    
     streamlit.header('Enter your Column')
     ##column
     COLUMNVAL = get_results([f"select column_name from "+dbval+".information_schema.columns where table_catalog = '"+dbval+"' and table_schema = '"+schemaval+"' and table_name = '" + tableval+"';"],"Column")
