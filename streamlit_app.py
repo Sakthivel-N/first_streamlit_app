@@ -35,7 +35,7 @@ def get_results(query,s):
 with streamlit.form("first_form2"):
     
     
-# ##db
+    # ##db
     streamlit.header('Select your Database')
     dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
 
