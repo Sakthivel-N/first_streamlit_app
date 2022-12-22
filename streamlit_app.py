@@ -72,20 +72,21 @@ SEARCHVAL  = streamlit.text_input("Enter "+COLUMNVAL+" value : " )
 ## FOR COLUMN 
 #
 # all dml
-streamlit.header('All DML on column')
-get_results([f" select * from Data_lineage.PUBLIC.employee_changes  WHERE "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+if SEARCHVAL:
+    streamlit.header('All DML on column')
+    get_results([f" select * from Data_lineage.PUBLIC.employee_changes  WHERE "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
 
-streamlit.header('All Insert on column')
-#insert only
-get_results([f"select * from Data_lineage.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+    streamlit.header('All Insert on column')
+    #insert only
+    get_results([f"select * from Data_lineage.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
 
-streamlit.header('All Updates on column')
-#update only
-get_results([f"select * from Data_lineage.PUBLIC.employee_changes where (metadata$action ='INSERT' or metadata$action ='DELETE' )and metadata$isupdate='true' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
+    streamlit.header('All Updates on column')
+    #update only
+    get_results([f"select * from Data_lineage.PUBLIC.employee_changes where (metadata$action ='INSERT' or metadata$action ='DELETE' )and metadata$isupdate='true' AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by start_time;"],'NO')
 
-streamlit.header('All Deletes on column')
-#delete only
-get_results([f"select * from Data_lineage.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false'  AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by  start_time;"],'NO')
+    streamlit.header('All Deletes on column')
+    #delete only
+    get_results([f"select * from Data_lineage.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false'  AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by  start_time;"],'NO')
 
 streamlit.header('-----------------------------***----------------------------')
 
