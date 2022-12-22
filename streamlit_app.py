@@ -98,7 +98,7 @@ with streamlit.form("first_form3"):
         #delete only
         get_results([f"select * from Data_lineage.PUBLIC.employee_changes where metadata$action ='DELETE' and metadata$isupdate='false'  AND "+COLUMNVAL+" = "+ SEARCHVAL+" order by  start_time;"],'NO')
 
-        streamlit.form_submit_button(label='Run')
+    streamlit.form_submit_button(label='Run')
 
 
 # def get_db():
