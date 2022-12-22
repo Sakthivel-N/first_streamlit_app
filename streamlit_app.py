@@ -37,7 +37,7 @@ dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DA
 
 streamlit.header('Select your Schema')
 # ##schema
-schemaval = get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
+schemaval = get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval[0]+"';"],"schema")
 
 streamlit.stop()
 streamlit.header('Select your Table')
