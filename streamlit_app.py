@@ -21,7 +21,7 @@ def get_results(query,s):
             result= my_cur.fetchall()
             
             if(s != 'NO'):
-                inputval = streamlit.selectbox("Enter your "+s+" : ", list(i[0] for i in result)) 
+                inputval = streamlit.checkbox("Enter your "+s+" : ", list(i[0] for i in result)) 
                 return(inputval)
             else:
                 streamlit.dataframe(result);
