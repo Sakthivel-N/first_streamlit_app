@@ -37,7 +37,7 @@ dbval = streamlit.session_state.projects[0]
 streamlit.write(dbval)
 streamlit.header('Select your Schema')
 # ##schema
-get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+str(dbval[0])+"';"],"schema")
+get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
 schemaval = streamlit.session_state.projects[1]
 
 streamlit.stop()
