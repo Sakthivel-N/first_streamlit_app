@@ -31,8 +31,8 @@ def get_results(query,s):
         my_cnx.close()
 
 # ##db
-streamlit.button("DL")
-if streamlit.button("DL"):
+clicked = streamlit.button("DL")
+if clicked:
 
 
     streamlit.header('Select your Database')
