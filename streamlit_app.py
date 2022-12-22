@@ -53,9 +53,7 @@ with streamlit.form("first_form2"):
     
     streamlit.header('All DML Changes')
     # ##all Dml changes
-    get_results([f"call Data_lineage.PUBLIC.sp_dl_histroy('"+dbval+"."+schemaval+"."+tableval+"',1);"],'NO')
-    get_results([f"call Data_lineage.PUBLIC.sp_dl();"],'NO')
-    get_results([f"select * from Data_lineage.PUBLIC.employee_changes order by start_time ;"],'NO')
+    get_results([f"call Data_lineage.PUBLIC.sp_dl_histroy('"+dbval+"."+schemaval+"."+tableval+"',1);",f"call Data_lineage.PUBLIC.sp_dl();",f"select * from Data_lineage.PUBLIC.employee_changes order by start_time ;"],'NO')
     streamlit.header('All Inserts')
     # ##inser all
     get_results([f"select * from Data_lineage.PUBLIC.employee_changes where metadata$action ='INSERT' and metadata$isupdate='false' order by start_time;"],'NO')
