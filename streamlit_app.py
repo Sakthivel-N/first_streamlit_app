@@ -5,10 +5,9 @@ import snowflake.connector
 from urllib.error import URLError
 import re
 from io import StringIO
-from streamlit_autorefresh import st_autorefresh
 
 streamlit.title("Data Lineage");
-st_autorefresh(interval=10 * 60 * 1000, key="dataframerefresh")
+
 def get_results(query,s):
    
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
