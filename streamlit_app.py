@@ -27,7 +27,9 @@ def get_results(query,s):
                 inputval = streamlit.selectbox("Enter your "+s+" : ", list(i[0] for i in result)) 
                 return(inputval)
             else:
-                streamlit.dataframe(result);
+                for i in result:
+                    streamlit.write(i)
+                # streamlit.dataframe(result);
             
         finally:
             my_cur.close()
