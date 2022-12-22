@@ -9,6 +9,15 @@ from io import StringIO
 streamlit.title("Data Lineage");
 
 
+with streamlit.form("first_form2"):
+    b1 = streamlit.selectbox(label='b1', options=['a', 'b'])
+    if b1 == 'a':
+        b2 = streamlit.selectbox(label='b2', options=['a1', 'a2'])
+    else:
+        b3 = streamlit.selectbox(label='b3', options=['b1', 'b2'])
+    streamlit.form_submit_button(label='submit')
+
+streamlit.stop()
 def get_results(query,s):
 
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
