@@ -8,7 +8,7 @@ from io import StringIO
 
 streamlit.title("Data Lineage");
 
-streamlit.session_state.projects = []
+
 def get_results(query,s):
 
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
@@ -22,7 +22,7 @@ def get_results(query,s):
             
             if(s != 'NO'):
                 inputval = streamlit.selectbox("Enter your "+s+" : ", list(i[0] for i in result)) 
-                streamlit.session_state.projects.append(inputval)
+                return(inputval)
             else:
                 streamlit.dataframe(result);
             
@@ -32,15 +32,14 @@ def get_results(query,s):
 
 # ##db
 streamlit.header('Select your Database')
-get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
-dbval = streamlit.session_state.projects[0]
-streamlit.write(dbval)
+dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
+
+
 streamlit.header('Select your Schema')
 # ##schema
-get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
-schemaval = streamlit.session_state.projects[1]
+schemaval = get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
 
-streamlit.stop()
+
 streamlit.header('Select your Table')
 # ##Table
 tableval = get_results([f"select DISTINCT(table_name) from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+dbval+"' and table_schema ='"+schemaval+"';"],"Table")
