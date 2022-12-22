@@ -31,15 +31,19 @@ def get_results(query,s):
         my_cnx.close()
 
 # ##db
+streamlit.button("DL")
+if streamlit.button("DL"):
 
-streamlit.header('Select your Database')
-dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
+
+    streamlit.header('Select your Database')
+    dbval = get_results([f"Select Database_name from SNOWFLAKE.INFORMATION_SCHEMA.DATABASES;"],"Database")
 
 
-streamlit.header('Select your Schema')
-# ##schema
-schemaval = get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
+    streamlit.header('Select your Schema')
+    # ##schema
+    schemaval = get_results([f"select DISTINCT(table_schema )from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog ='"+dbval+"';"],"schema")
 
+streamlit.stop()
 streamlit.header('Select your Table')
 # ##Table
 tableval = get_results([f"select DISTINCT(table_name) from SNOWFLAKE.INFORMATION_SCHEMA.TABLE_STORAGE_METRICS where table_catalog = '"+dbval+"' and table_schema ='"+schemaval+"';"],"Table")
