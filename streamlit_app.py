@@ -5,13 +5,13 @@ import snowflake.connector
 from urllib.error import URLError
 import re
 from io import StringIO
-
+import time
 
 streamlit.title("Data Lineage");
 
-
+@streamlit.cache(suppress_st_warning=True) 
 def get_results(query,s):
-
+    time.sleep(50)
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
     with my_cnx.cursor() as my_cur:
         try:
