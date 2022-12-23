@@ -15,9 +15,9 @@ def c1():
     streamlit.info(f"colour1_changed: {streamlit.session_state.colour1}")
 
 colour = streamlit.selectbox("Colour", ["blue", "red", "yellow", "green"], key="colour", on_change=colour_changed)
-colour1 = streamlit.selectbox("Colour", ["blue", "red", "yellow", "green"], key="colour", on_change=c1)
+# colour1 = streamlit.selectbox("Colour", ["blue", "red", "yellow", "green"], key="colour", on_change=c1)
 streamlit.info(f"selectbox returned: {colour}")
-streamlit.info(f"selectbox returned: {colour1}")
+# streamlit.info(f"selectbox returned: {colour1}")
 
 streamlit.stop()
 def get_results(query,s):
