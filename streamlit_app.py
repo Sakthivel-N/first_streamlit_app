@@ -9,7 +9,7 @@ import time
 
 streamlit.title("Data Lineage");
 
-@streamlit.cache(suppress_st_warning=True) 
+@streamlit.cache 
 def get_results(query,s):
     time.sleep(50)
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
