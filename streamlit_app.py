@@ -8,9 +8,7 @@ from io import StringIO
 
 
 streamlit.title("Data Lineage");
-# @streamlit.cache(allow_output_mutation=True)
-FooType = ''
-@streamlit.cache(hash_funcs={FooType: lambda _: None})
+
 def get_results(query,s):
     my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
     with my_cnx.cursor() as my_cur:
